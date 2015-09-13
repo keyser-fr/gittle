@@ -11,7 +11,7 @@ from functools import partial, wraps
 
 # Dulwich imports
 from dulwich.repo import Repo as DulwichRepo
-from dulwich.client import get_transport_and_path
+from dulwich.client import get_transport_and_path, get_ssh_vendor as ssh_vendor_kls, SSHGitClient
 from dulwich.index import build_index_from_tree, changes_from_tree
 from dulwich.objects import Tree, Blob
 from dulwich.server import update_server_info
@@ -21,7 +21,17 @@ from dulwich.refs import SYMREF
 import funky
 
 # Local imports
-from gittle.auth import GittleAuth
+from gittle.auth import GittleAuth, HAS_PARAMIKO
+
+if HAS_PARAMIKO:
+    # If paramiko is available, make Dulwich use it.
+    try:
+        from dulwich.contrib.paramiko_vendor import ParamikoSSHVendor
+    except ImportError:
+        pass
+    else:
+        ssh_vendor_kls = ParamikoSSHVendor
+
 from gittle.exceptions import InvalidRemoteUrl
 from gittle import utils
 
@@ -316,16 +326,18 @@ class Gittle(object):
         if not origin_uri:
             raise InvalidRemoteUrl()
 
-        client_kwargs = {}
         auth_kwargs = self.authenticator.kwargs()
 
-        client_kwargs.update(auth_kwargs)
-        client_kwargs.update(kwargs)
-        client_kwargs.update({
-            'report_activity': self.report_activity
-        })
+        client, remote_path = get_transport_and_path(origin_uri,
+                report_activity=self.report_activity,
+                username=auth_kwargs.pop('username', None),
+                password=auth_kwargs.pop('password', None),
+                **kwargs)
 
-        client, remote_path = get_transport_and_path(origin_uri, **client_kwargs)
+        if isinstance(client, SSHGitClient):
+            client.ssh_vendor = ssh_vendor_kls()
+            client.ssh_vendor.ssh_kwargs = auth_kwargs
+
         return client, remote_path
 
     def push_to(self, origin_uri, branch_name=None, progress=None):
