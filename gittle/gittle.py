@@ -326,17 +326,12 @@ class Gittle(object):
         if not origin_uri:
             raise InvalidRemoteUrl()
 
-        auth_kwargs = self.authenticator.kwargs()
-
         client, remote_path = get_transport_and_path(origin_uri,
-                report_activity=self.report_activity,
-                username=auth_kwargs.pop('username', None),
-                password=auth_kwargs.pop('password', None),
-                **kwargs)
+                report_activity=self.report_activity, **kwargs)
 
         if isinstance(client, SSHGitClient):
             client.ssh_vendor = ssh_vendor_kls()
-            client.ssh_vendor.ssh_kwargs = auth_kwargs
+            client.ssh_vendor.ssh_kwargs = self.authenticator.kwargs()
 
         return client, remote_path
 
