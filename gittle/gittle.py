@@ -113,7 +113,7 @@ class Gittle(object):
     # Acceptable Root paths
     ROOT_PATHS = (os.path.curdir, os.path.sep)
 
-    # Filemode activation                                                                                                       |-
+    # Filemode activation
     FILEMODE = True # True by default
 
     def __init__(self, repo_or_path, origin_uri=None, auth=None, report_activity=None, *args, **kwargs):
