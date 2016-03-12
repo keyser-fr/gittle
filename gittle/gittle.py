@@ -637,13 +637,13 @@ class Gittle(object):
             filtered_paths = [
                 funky.first_true(names)
                 for names, modes, sha in changed_entries
-                if tuple(map(bool, names)) == pattern and funky.first_true(names) and sha[0] != sha[1]
+                if tuple(map(bool, names)) == pattern and funky.first_true(names)
             ]
         else:
             filtered_paths = [
                 funky.first_true(names)
                 for names, modes, sha in changed_entries
-                if tuple(map(bool, names)) == pattern and funky.first_true(names)
+                if tuple(map(bool, names)) == pattern and funky.first_true(names) and sha[0] != sha[1]
             ]
 
         return filtered_paths
