@@ -113,6 +113,9 @@ class Gittle(object):
     # Acceptable Root paths
     ROOT_PATHS = (os.path.curdir, os.path.sep)
 
+    # Filemode activation                                                                                                       |-
+    FILEMODE = True # True by default
+
     def __init__(self, repo_or_path, origin_uri=None, auth=None, report_activity=None, *args, **kwargs):
         if isinstance(repo_or_path, DulwichRepo):
             self.repo = repo_or_path
@@ -628,11 +631,20 @@ class Gittle(object):
     @funky.transform(set)
     def _changed_entries_by_pattern(self, pattern):
         changed_entries = self._changed_entries()
-        filtered_paths = [
-            funky.first_true(names)
-            for names, modes, sha in changed_entries
-            if tuple(map(bool, names)) == pattern and funky.first_true(names)
-        ]
+        filtered_paths = None
+
+        if self.FILEMODE:
+            filtered_paths = [
+                funky.first_true(names)
+                for names, modes, sha in changed_entries
+                if tuple(map(bool, names)) == pattern and funky.first_true(names) and sha[0] != sha[1]
+            ]
+        else:
+            filtered_paths = [
+                funky.first_true(names)
+                for names, modes, sha in changed_entries
+                if tuple(map(bool, names)) == pattern and funky.first_true(names)
+            ]
 
         return filtered_paths
 
@@ -649,8 +661,7 @@ class Gittle(object):
     @property
     @funky.transform(set)
     def modified_files(self):
-        modified_files = self._changed_entries_by_pattern(self.PATTERN_MODIFIED) - self.ignored_files
-        return modified_files
+        return self._changed_entries_by_pattern(self.PATTERN_MODIFIED) - self.ignored_files
 
     @property
     @funky.transform(set)
