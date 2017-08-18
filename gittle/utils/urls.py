@@ -77,4 +77,3 @@ def parse_url(url, defaults=None):
         'password': password,
         'path': path,
     }
-

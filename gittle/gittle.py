@@ -44,7 +44,6 @@ if HAS_PARAMIKO:
 from gittle.exceptions import InvalidRemoteUrl
 from gittle import utils
 
-
 # Exports
 __all__ = ('Gittle',)
 
