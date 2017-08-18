@@ -6,9 +6,10 @@
 
 # Python imports
 try:
-    from urllib.parse import urlparse
+    from urllib.parse import urlparse # Python 3
 except ImportError:
-    from urllib.parse import urlparse
+    # from urllib.parse import urlparse
+    from urlparse import urlparse # Python 2
 
 # Local imports
 from funky import first_true

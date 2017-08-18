@@ -7,7 +7,7 @@
 # License, Version 2.0.  See the COPYING file for further details.
 
 # From the future
-
+from __future__ import absolute_import
 
 # Python imports
 import os
@@ -653,19 +653,12 @@ class Gittle(object):
     def _changed_entries_by_pattern(self, pattern):
         changed_entries = self._changed_entries()
         filtered_paths = None
-         #if the pattern is PATTERN_MODIFIED, should check the sha
-        if self.PATTERN_MODIFIED == pattern:
-            filtered_paths = [
-              funky.first_true(names)
-                  for names, modes, sha in changed_entries
-                  if tuple(map(bool, names)) == pattern and funky.first_true(names) and sha[0] == sha[1]
-            ]
-        else :
-            filtered_paths = [
-               funky.first_true(names)
-                 for names, modes, sha in changed_entries
-                 if tuple(map(bool, names)) == pattern and funky.first_true(names)
-            ]
+
+        filtered_paths = [
+            funky.first_true(names)
+            for names, modes, sha in changed_entries
+            if tuple(map(bool, names)) == pattern and funky.first_true(names) and sha[0] != sha[1]
+        ]
         return filtered_paths
 
     @property
