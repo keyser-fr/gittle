@@ -1,5 +1,12 @@
 #!/usr/bin/python
 
+# Copyright 2014 Aaron O'Mullan <aaron.omullan@friendco.de>
+# Copyright 2013 Jace Browning <jacebrowning@gmail.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it only under the terms of the GNU GPLv2 and/or the Apache
+# License, Version 2.0.  See the COPYING file for further details.
+
 """
 Setup script for Gittle.
 """
@@ -33,10 +40,10 @@ setup_kwargs = {
     'packages': ['gittle', 'gittle.utils'],
     'install_requires': [
     # PyPI
-    'paramiko==1.10.0',
+    'paramiko>=1.10.0',
     'pycrypto==2.6',
-    'dulwich==0.9.7',
-    'funky==0.0.2',
+    'dulwich>=0.9.7',
+    'funky>=0.0.2',
     ],
 }
 

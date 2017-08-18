@@ -1,3 +1,9 @@
+# Copyright 2013 Aaron O'Mullan <aaron.omullan@friendco.de>
+#
+# This program is free software; you can redistribute it and/or
+# modify it only under the terms of the GNU GPLv2 and/or the Apache
+# License, Version 2.0.  See the COPYING file for further details.
+
 import os
 from functools import partial
 
@@ -7,10 +13,10 @@ BASE_DIR = '/Users/aaron/git/'
 absbase = partial(os.path.join, BASE_DIR)
 
 TRIES = 1
-PATHS = map(absbase, [
+PATHS = list(map(absbase, [
     'gittle/',
     'loadfire/',
-])
+]))
 
 
 def paths_exists(repo):
@@ -45,7 +51,7 @@ def test_repo(repo_path):
 def main():
     paths = PATHS * TRIES
     for path in paths:
-        print('Testing : %s' % path)
+        print(('Testing : %s' % path))
         test_repo(path)
 
 

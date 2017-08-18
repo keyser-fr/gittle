@@ -1,3 +1,9 @@
+# Copyright 2013 Aaron O'Mullan <aaron.omullan@friendco.de>
+#
+# This program is free software; you can redistribute it and/or
+# modify it only under the terms of the GNU GPLv2 and/or the Apache
+# License, Version 2.0.  See the COPYING file for further details.
+
 # Python imports
 import os
 
@@ -35,8 +41,8 @@ class SubFileSystemBackend(FileSystemBackend):
         stripped_path = path.strip('/')
         full_path = self.rewrite_path(stripped_path)
 
-        print('opening %s' % path)
-        print('full path = %s' % full_path)
+        print(('opening %s' % path))
+        print(('full path = %s' % full_path))
 
         return super(SubFileSystemBackend, self).open_repository(full_path)
 

@@ -1,11 +1,17 @@
+# Copyright 2012-2013 Aaron O'Mullan <aaron.omullan@friendco.de>
+#
+# This program is free software; you can redistribute it and/or
+# modify it only under the terms of the GNU GPLv2 and/or the Apache
+# License, Version 2.0.  See the COPYING file for further details.
+
 # Python imports
 import os
 try:
     # Try importing the faster version
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
     # Fallback to pure python if not available
-    from StringIO import StringIO
+    from io import StringIO
 
 
 # Paramiko imports
@@ -22,9 +28,11 @@ from .exceptions import InvalidRSAKey
 # Exports
 __all__ = ('GittleAuth',)
 
+if os.sys.version_info.major > 2 or (os.sys.version_info.major == 2 and os.sys.version_info.minor < 7):
+    str = str
 
 def get_pkey_file(pkey):
-    if isinstance(pkey, basestring):
+    if isinstance(pkey, str):
         if os.path.exists(pkey):
             pkey_file = open(pkey)
         else:
