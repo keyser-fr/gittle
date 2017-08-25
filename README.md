@@ -15,7 +15,7 @@ It builds upon dulwich which provides most of the low-level machinery
 from gittle import Gittle
 
 repo_path = '/tmp/gittle_bare'
-repo_url = 'git+ssh://git@github.com/keyser-fr/gittle.git'
+repo_url = 'git@github.com:keyser-fr/gittle.git'
 
 repo = Gittle.clone(repo_url, repo_path)
 ```
